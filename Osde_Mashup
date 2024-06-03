@@ -1,0 +1,56 @@
+<html>
+<body>
+<div id="mindtouch" style="height: 550px;"></div>
+
+<script type="text/javascript">
+  // Substitua esta URL pela URL do seu provedor de SSO
+  var ssoUrl = "https://osde-prod2.mindtouch.us/@app/auth/2/login";
+
+  var newWindow = window.open(ssoUrl, "_blank", "width=800,height=600");
+
+  // Função para fechar a nova janela após 5 segundos
+  setTimeout(function() {
+    if (newWindow && !newWindow.closed) {
+      newWindow.close();
+    }
+  }, 5000);
+
+  // Função para verificar quando a nova janela foi fechada e processar o token
+  var timer = setInterval(function() {
+    if (newWindow.closed) {
+      clearInterval(timer);
+      // Aqui você pode adicionar lógica para tratar o token retornado após a autenticação SSO
+      var HTML = '<script type="mindtouch/embed" id="mindtouch-embed-a4bc248b33ccacbd8f24e560e4c0b40bdb78d738e6ea933d0aac160ac1427c5c" data-search-query="DEFAULT_SEARCH" data-case-id="TICKET_ID"><\/script>';
+      HTML = HTML.replace("DEFAULT_SEARCH", sap.byd.ui.mashup.context.inport.ResolutionCategoryName);
+      HTML = HTML.replace("TICKET_ID", sap.byd.ui.mashup.context.inport.TicketID);
+      document.getElementById("mindtouch").innerHTML = HTML;
+
+      var js_script = document.createElement('script');
+      js_script.type = "text/javascript";
+      js_script.src = "https://osde-prod2.mindtouch.us/@embed/a4bc248b33ccacbd8f24e560e4c0b40bdb78d738e6ea933d0aac160ac1427c5c.js";
+      js_script.async = true;
+      document.getElementsByTagName('head')[0].appendChild(js_script);
+
+      // Função para simular um clique após 1 segundo
+      setTimeout(function() {
+        simulateClick();
+      }, 1000);
+    }
+  }, 1000);
+
+  // Função para simular um clique em um elemento
+  function simulateClick() {
+    var element = document.getElementById("mindtouch");
+    if (element) {
+      // Simular clique no elemento
+      var event = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+      element.dispatchEvent(event);
+    }
+  }
+</script>
+</body>
+</html>
